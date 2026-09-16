@@ -8,57 +8,78 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin-top: 35px;
       background-color: #f4f4f4;
     }
 
     h1 {
-      font-size: 36px;
+      font-size: 32px;
+      margin-bottom: 15px;
     }
 
+    /* CONFIGURACIÓ DEL TEMPS */
+
     .configuracio {
-      margin: 18px;
-      font-size: 20px;
+      margin: 10px;
+      font-size: 15px;
     }
+
+    /* BLOCS DELS DOS NÚMEROS */
 
     .bloc {
       display: inline-block;
-      padding: 15px 25px;
-      margin: 10px;
+      padding: 8px 12px;
+      margin: 5px;
       background-color: white;
-      border-radius: 10px;
+      border-radius: 8px;
+      font-size: 14px;
     }
 
+    .bloc strong {
+      font-size: 15px;
+    }
+
+    /* CAMPS D'ENTRADA */
+
     input {
-      font-size: 19px;
-      width: 90px;
-      padding: 6px;
-      margin: 5px;
+      font-size: 14px;
+      width: 65px;
+      padding: 4px;
+      margin: 3px;
       text-align: center;
     }
 
+    /* OPERACIÓ: MOLT MÉS GRAN */
+
     #operacio {
-      font-size: 60px;
+      font-size: 95px;
       font-weight: bold;
-      margin: 30px;
+      margin: 40px 20px 25px 20px;
     }
+
+    /* COMPTE ENRERE */
 
     #temps {
-      font-size: 50px;
+      font-size: 55px;
       font-weight: bold;
-      margin: 20px;
+      margin: 15px;
     }
+
+    /* RESULTAT */
 
     #resultat {
-      font-size: 45px;
+      font-size: 55px;
       font-weight: bold;
-      margin: 25px;
+      margin: 20px;
+      min-height: 65px;
     }
 
+    /* BOTONS */
+
     button {
-      font-size: 22px;
-      padding: 12px 25px;
-      margin: 10px;
+      font-size: 20px;
+      padding: 11px 22px;
+      margin: 8px;
       cursor: pointer;
     }
   </style>
@@ -68,9 +89,11 @@
 
   <h1>Operació aleatòria</h1>
 
+
   <!-- TEMPS -->
 
   <div class="configuracio">
+
     Temps:
 
     <input type="number" id="minuts" value="1" min="0">
@@ -78,6 +101,7 @@
 
     <input type="number" id="segons" value="0" min="0" max="59">
     s
+
   </div>
 
 
@@ -85,24 +109,16 @@
 
   <div class="bloc">
 
-    <strong>Primer número</strong><br><br>
+    <strong>Primer número</strong>
 
-    Mínim:
+    &nbsp; Mín:
     <input type="number" id="min1" value="0" step="0.001">
 
-    Màxim:
+    Màx:
     <input type="number" id="max1" value="999" step="0.001">
 
-    <br>
-
     Decimals:
-    <input
-      type="number"
-      id="decimals1"
-      value="3"
-      min="0"
-      max="10"
-    >
+    <input type="number" id="decimals1" value="3" min="0" max="10">
 
   </div>
 
@@ -111,24 +127,16 @@
 
   <div class="bloc">
 
-    <strong>Segon número</strong><br><br>
+    <strong>Segon número</strong>
 
-    Mínim:
+    &nbsp; Mín:
     <input type="number" id="min2" value="0" step="0.001">
 
-    Màxim:
+    Màx:
     <input type="number" id="max2" value="999" step="0.001">
 
-    <br>
-
     Decimals:
-    <input
-      type="number"
-      id="decimals2"
-      value="3"
-      min="0"
-      max="10"
-    >
+    <input type="number" id="decimals2" value="3" min="0" max="10">
 
   </div>
 
@@ -166,8 +174,6 @@
     let tempsRestant = 60;
 
 
-    // GENERAR UN NÚMERO AMB EL NOMBRE DE DECIMALS INDICAT
-
     function generarNumero(minim, maxim, decimals) {
 
       let factor = Math.pow(10, decimals);
@@ -184,8 +190,6 @@
     }
 
 
-    // ACTUALITZAR EL RELLOTGE
-
     function actualitzarTemps() {
 
       let minuts = Math.floor(tempsRestant / 60);
@@ -198,14 +202,10 @@
     }
 
 
-    // GENERAR NOVA OPERACIÓ
-
     function generarOperacio() {
 
       clearInterval(temporitzador);
 
-
-      // LLEGIM ELS RANGS
 
       let min1 =
         Number(document.getElementById("min1").value);
@@ -220,8 +220,6 @@
         Number(document.getElementById("max2").value);
 
 
-      // LLEGIM ELS DECIMALS
-
       let decimals1 =
         Number(document.getElementById("decimals1").value);
 
@@ -229,17 +227,13 @@
         Number(document.getElementById("decimals2").value);
 
 
-      // COMPROVACIONS
-
       if (min1 > max1 || min2 > max2) {
 
         alert("El mínim no pot ser superior al màxim.");
-
         return;
+
       }
 
-
-      // GENEREM ELS DOS NÚMEROS
 
       let numero1 =
         generarNumero(min1, max1, decimals1);
@@ -248,8 +242,6 @@
         generarNumero(min2, max2, decimals2);
 
 
-      // TRIEM L'OPERACIÓ
-
       let operacions = ["+", "−", "×", "÷"];
 
       let operacio =
@@ -257,8 +249,6 @@
           Math.floor(Math.random() * operacions.length)
         ];
 
-
-      // CALCULEM EL RESULTAT
 
       if (operacio === "+") {
 
@@ -285,8 +275,6 @@
       }
 
 
-      // MOSTREM L'OPERACIÓ
-
       document.getElementById("operacio").textContent =
 
         numero1
@@ -304,12 +292,8 @@
           .replace(".", ",");
 
 
-      // ESBORREM EL RESULTAT ANTERIOR
-
       document.getElementById("resultat").textContent = "";
 
-
-      // LLEGIM EL TEMPS
 
       let minuts =
         Number(document.getElementById("minuts").value);
@@ -325,8 +309,6 @@
       actualitzarTemps();
 
 
-      // INICIEM EL COMPTE ENRERE
-
       temporitzador = setInterval(function() {
 
         tempsRestant--;
@@ -337,7 +319,6 @@
         if (tempsRestant <= 0) {
 
           clearInterval(temporitzador);
-
           mostrarResultat();
 
         }
@@ -346,8 +327,6 @@
 
     }
 
-
-    // MOSTRAR RESULTAT
 
     function mostrarResultat() {
 
