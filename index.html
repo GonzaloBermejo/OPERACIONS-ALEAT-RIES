@@ -8,7 +8,7 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 100px;
+      margin-top: 70px;
       background-color: #f4f4f4;
     }
 
@@ -19,12 +19,37 @@
     #operacio {
       font-size: 60px;
       font-weight: bold;
-      margin: 40px;
+      margin: 35px;
+    }
+
+    #temps {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 25px;
+    }
+
+    #resultat {
+      font-size: 45px;
+      font-weight: bold;
+      margin: 30px;
+    }
+
+    .configuracio {
+      margin: 25px;
+      font-size: 20px;
+    }
+
+    input {
+      font-size: 20px;
+      width: 80px;
+      padding: 5px;
+      text-align: center;
     }
 
     button {
-      font-size: 24px;
-      padding: 15px 30px;
+      font-size: 22px;
+      padding: 12px 25px;
+      margin: 10px;
       cursor: pointer;
     }
   </style>
@@ -34,33 +59,127 @@
 
   <h1>Operació aleatòria</h1>
 
+  <div class="configuracio">
+    Temps:
+    <input type="number" id="tempsConfigurat" value="20" min="1">
+    segons
+  </div>
+
   <div id="operacio">---</div>
 
-  <button onclick="generarOperacio()">Generar operació</button>
+  <div id="temps">20</div>
+
+  <div id="resultat"></div>
+
+  <button onclick="generarOperacio()">
+    Nova operació
+  </button>
+
+  <button onclick="mostrarResultat()">
+    Mostrar resultat
+  </button>
+
 
   <script>
 
+    let resultatActual = 0;
+    let temporitzador;
+    let tempsRestant = 20;
+
+
     function generarNumero() {
-      // Número entre 0,000 y 999,999
-      return (Math.random() * 1000).toFixed(3);
+      return Number((Math.random() * 1000).toFixed(3));
     }
+
 
     function generarOperacio() {
 
-      // Generamos los dos números
+      // Aturem qualsevol temporitzador anterior
+      clearInterval(temporitzador);
+
       let numero1 = generarNumero();
       let numero2 = generarNumero();
 
-      // Las cuatro operaciones básicas
       let operacions = ["+", "−", "×", "÷"];
 
-      // Elegimos una operación al azar
       let operacio =
         operacions[Math.floor(Math.random() * operacions.length)];
 
-      // Mostramos el ejercicio
+
+      // Calculem el resultat
+      if (operacio === "+") {
+        resultatActual = numero1 + numero2;
+      }
+
+      else if (operacio === "−") {
+        resultatActual = numero1 - numero2;
+      }
+
+      else if (operacio === "×") {
+        resultatActual = numero1 * numero2;
+      }
+
+      else if (operacio === "÷") {
+        resultatActual = numero1 / numero2;
+      }
+
+
+      // Mostrem l'operació amb coma decimal
       document.getElementById("operacio").textContent =
-        numero1 + " " + operacio + " " + numero2;
+        numero1.toFixed(3).replace(".", ",") +
+        " " +
+        operacio +
+        " " +
+        numero2.toFixed(3).replace(".", ",");
+
+
+      // Esborrem el resultat anterior
+      document.getElementById("resultat").textContent = "";
+
+
+      // Agafem el temps configurat
+      tempsRestant =
+        Number(document.getElementById("tempsConfigurat").value);
+
+      document.getElementById("temps").textContent =
+        tempsRestant;
+
+
+      // Comença la compte enrere
+      temporitzador = setInterval(function() {
+
+        tempsRestant--;
+
+        document.getElementById("temps").textContent =
+          tempsRestant;
+
+
+        // Quan arriba a zero
+        if (tempsRestant <= 0) {
+
+          clearInterval(temporitzador);
+
+          mostrarResultat();
+
+        }
+
+      }, 1000);
+
+    }
+
+
+    function mostrarResultat() {
+
+      // Aturem el temps
+      clearInterval(temporitzador);
+
+      // Mostrem el resultat
+      document.getElementById("resultat").textContent =
+        "= " +
+        resultatActual
+          .toFixed(3)
+          .replace(".", ",");
+
     }
 
   </script>
