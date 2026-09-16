@@ -8,7 +8,7 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 35px;
+      margin-top: 30px;
       background-color: #f4f4f4;
     }
 
@@ -17,14 +17,12 @@
       margin-bottom: 15px;
     }
 
-    /* CONFIGURACIÓ DEL TEMPS */
+    /* CONFIGURACIÓ */
 
     .configuracio {
       margin: 10px;
       font-size: 15px;
     }
-
-    /* BLOCS DELS DOS NÚMEROS */
 
     .bloc {
       display: inline-block;
@@ -39,8 +37,6 @@
       font-size: 15px;
     }
 
-    /* CAMPS D'ENTRADA */
-
     input {
       font-size: 14px;
       width: 65px;
@@ -49,12 +45,12 @@
       text-align: center;
     }
 
-    /* OPERACIÓ: MOLT MÉS GRAN */
+    /* OPERACIÓ */
 
     #operacio {
       font-size: 95px;
       font-weight: bold;
-      margin: 40px 20px 25px 20px;
+      margin: 35px 20px 20px 20px;
     }
 
     /* COMPTE ENRERE */
@@ -82,6 +78,51 @@
       margin: 8px;
       cursor: pointer;
     }
+
+    /* RECTA NUMÈRICA */
+
+    #contenidorRecta {
+      display: none;
+      width: 90%;
+      max-width: 1000px;
+      margin: 25px auto 40px auto;
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    #rectaNumerica {
+      width: 100%;
+      height: 150px;
+      overflow: visible;
+    }
+
+    .liniaRecta {
+      stroke: #222;
+      stroke-width: 3;
+    }
+
+    .marca {
+      stroke: #222;
+      stroke-width: 2;
+    }
+
+    .numeroMarca {
+      font-size: 18px;
+      text-anchor: middle;
+    }
+
+    .puntResultat {
+      fill: #d62828;
+    }
+
+    .textResultat {
+      font-size: 22px;
+      font-weight: bold;
+      text-anchor: middle;
+      fill: #d62828;
+    }
   </style>
 </head>
 
@@ -96,10 +137,21 @@
 
     Temps:
 
-    <input type="number" id="minuts" value="1" min="0">
+    <input
+      type="number"
+      id="minuts"
+      value="1"
+      min="0"
+    >
     min
 
-    <input type="number" id="segons" value="0" min="0" max="59">
+    <input
+      type="number"
+      id="segons"
+      value="0"
+      min="0"
+      max="59"
+    >
     s
 
   </div>
@@ -112,13 +164,29 @@
     <strong>Primer número</strong>
 
     &nbsp; Mín:
-    <input type="number" id="min1" value="0" step="0.001">
+    <input
+      type="number"
+      id="min1"
+      value="0"
+      step="0.001"
+    >
 
     Màx:
-    <input type="number" id="max1" value="999" step="0.001">
+    <input
+      type="number"
+      id="max1"
+      value="999"
+      step="0.001"
+    >
 
     Decimals:
-    <input type="number" id="decimals1" value="3" min="0" max="10">
+    <input
+      type="number"
+      id="decimals1"
+      value="3"
+      min="0"
+      max="10"
+    >
 
   </div>
 
@@ -130,13 +198,29 @@
     <strong>Segon número</strong>
 
     &nbsp; Mín:
-    <input type="number" id="min2" value="0" step="0.001">
+    <input
+      type="number"
+      id="min2"
+      value="0"
+      step="0.001"
+    >
 
     Màx:
-    <input type="number" id="max2" value="999" step="0.001">
+    <input
+      type="number"
+      id="max2"
+      value="999"
+      step="0.001"
+    >
 
     Decimals:
-    <input type="number" id="decimals2" value="3" min="0" max="10">
+    <input
+      type="number"
+      id="decimals2"
+      value="3"
+      min="0"
+      max="10"
+    >
 
   </div>
 
@@ -167,45 +251,76 @@
   </button>
 
 
+  <!-- RECTA NUMÈRICA -->
+
+  <div id="contenidorRecta">
+
+    <svg
+      id="rectaNumerica"
+      viewBox="0 0 1000 150"
+      preserveAspectRatio="xMidYMid meet"
+    ></svg>
+
+  </div>
+
+
   <script>
 
     let resultatActual = 0;
     let temporitzador;
     let tempsRestant = 60;
+    let hiHaOperacio = false;
 
+
+    // GENERAR NÚMERO
 
     function generarNumero(minim, maxim, decimals) {
 
       let factor = Math.pow(10, decimals);
 
-      let minimEnter = Math.ceil(minim * factor);
-      let maximEnter = Math.floor(maxim * factor);
+      let minimEnter =
+        Math.ceil(minim * factor);
+
+      let maximEnter =
+        Math.floor(maxim * factor);
 
       let numeroEnter =
         Math.floor(
-          Math.random() * (maximEnter - minimEnter + 1)
+          Math.random() *
+          (maximEnter - minimEnter + 1)
         ) + minimEnter;
 
       return numeroEnter / factor;
     }
 
 
+    // ACTUALITZAR RELLOTGE
+
     function actualitzarTemps() {
 
-      let minuts = Math.floor(tempsRestant / 60);
-      let segons = tempsRestant % 60;
+      let minuts =
+        Math.floor(tempsRestant / 60);
+
+      let segons =
+        tempsRestant % 60;
 
       document.getElementById("temps").textContent =
+
         String(minuts).padStart(2, "0") +
         ":" +
         String(segons).padStart(2, "0");
+
     }
 
+
+    // GENERAR OPERACIÓ
 
     function generarOperacio() {
 
       clearInterval(temporitzador);
 
+
+      // LLEGIR RANGS
 
       let min1 =
         Number(document.getElementById("min1").value);
@@ -220,6 +335,8 @@
         Number(document.getElementById("max2").value);
 
 
+      // LLEGIR DECIMALS
+
       let decimals1 =
         Number(document.getElementById("decimals1").value);
 
@@ -227,55 +344,103 @@
         Number(document.getElementById("decimals2").value);
 
 
+      // COMPROVACIONS
+
       if (min1 > max1 || min2 > max2) {
 
-        alert("El mínim no pot ser superior al màxim.");
+        alert(
+          "El mínim no pot ser superior al màxim."
+        );
+
         return;
+      }
+
+
+      // GENERAR NÚMEROS
+
+      let numero1 =
+        generarNumero(
+          min1,
+          max1,
+          decimals1
+        );
+
+      let numero2 =
+        generarNumero(
+          min2,
+          max2,
+          decimals2
+        );
+
+
+      // OPERACIÓ ALEATÒRIA
+
+      let operacions =
+        ["+", "−", "×", "÷"];
+
+      let operacio =
+        operacions[
+          Math.floor(
+            Math.random() *
+            operacions.length
+          )
+        ];
+
+
+      // EVITEM DIVIDIR ENTRE ZERO
+
+      if (operacio === "÷") {
+
+        while (numero2 === 0) {
+
+          numero2 =
+            generarNumero(
+              min2,
+              max2,
+              decimals2
+            );
+
+        }
 
       }
 
 
-      let numero1 =
-        generarNumero(min1, max1, decimals1);
-
-      let numero2 =
-        generarNumero(min2, max2, decimals2);
-
-
-      let operacions = ["+", "−", "×", "÷"];
-
-      let operacio =
-        operacions[
-          Math.floor(Math.random() * operacions.length)
-        ];
-
+      // CALCULAR RESULTAT
 
       if (operacio === "+") {
 
-        resultatActual = numero1 + numero2;
+        resultatActual =
+          numero1 + numero2;
 
       }
 
       else if (operacio === "−") {
 
-        resultatActual = numero1 - numero2;
+        resultatActual =
+          numero1 - numero2;
 
       }
 
       else if (operacio === "×") {
 
-        resultatActual = numero1 * numero2;
+        resultatActual =
+          numero1 * numero2;
 
       }
 
       else if (operacio === "÷") {
 
-        resultatActual = numero1 / numero2;
+        resultatActual =
+          numero1 / numero2;
 
       }
 
 
-      document.getElementById("operacio").textContent =
+      // MOSTRAR OPERACIÓ
+
+      document.getElementById(
+        "operacio"
+      ).textContent =
 
         numero1
           .toFixed(decimals1)
@@ -292,14 +457,35 @@
           .replace(".", ",");
 
 
-      document.getElementById("resultat").textContent = "";
+      // AMAGAR RESULTAT ANTERIOR
 
+      document.getElementById(
+        "resultat"
+      ).textContent = "";
+
+      document.getElementById(
+        "contenidorRecta"
+      ).style.display = "none";
+
+
+      hiHaOperacio = true;
+
+
+      // TEMPS
 
       let minuts =
-        Number(document.getElementById("minuts").value);
+        Number(
+          document.getElementById(
+            "minuts"
+          ).value
+        );
 
       let segons =
-        Number(document.getElementById("segons").value);
+        Number(
+          document.getElementById(
+            "segons"
+          ).value
+        );
 
 
       tempsRestant =
@@ -309,36 +495,444 @@
       actualitzarTemps();
 
 
-      temporitzador = setInterval(function() {
+      // SI EL TEMPS ÉS ZERO
 
-        tempsRestant--;
+      if (tempsRestant <= 0) {
 
-        actualitzarTemps();
+        mostrarResultat();
+        return;
+
+      }
 
 
-        if (tempsRestant <= 0) {
+      // COMPTE ENRERE
 
-          clearInterval(temporitzador);
-          mostrarResultat();
+      temporitzador =
+        setInterval(function() {
 
-        }
+          tempsRestant--;
 
-      }, 1000);
+          actualitzarTemps();
+
+
+          if (tempsRestant <= 0) {
+
+            clearInterval(
+              temporitzador
+            );
+
+            mostrarResultat();
+
+          }
+
+        }, 1000);
 
     }
 
 
+    // MOSTRAR RESULTAT
+
     function mostrarResultat() {
+
+      if (!hiHaOperacio) {
+        return;
+      }
 
       clearInterval(temporitzador);
 
-      document.getElementById("resultat").textContent =
 
-        "= " +
+      // RESULTAT AMB 3 DECIMALS
 
+      let resultatMostrat =
         resultatActual
           .toFixed(3)
           .replace(".", ",");
+
+
+      document.getElementById(
+        "resultat"
+      ).textContent =
+
+        "= " + resultatMostrat;
+
+
+      // MOSTRAR RECTA
+
+      dibuixarRecta(
+        resultatActual
+      );
+
+    }
+
+
+    // DIBUIXAR RECTA NUMÈRICA
+
+    function dibuixarRecta(resultat) {
+
+      let contenidor =
+        document.getElementById(
+          "contenidorRecta"
+        );
+
+      let svg =
+        document.getElementById(
+          "rectaNumerica"
+        );
+
+
+      // BUIDEM LA RECTA ANTERIOR
+
+      svg.innerHTML = "";
+
+
+      /*
+        Escollim automàticament
+        una escala al voltant
+        del resultat.
+      */
+
+      let magnitud =
+        Math.abs(resultat);
+
+
+      let pas;
+
+      if (magnitud < 1) {
+
+        pas = 0.1;
+
+      }
+
+      else if (magnitud < 10) {
+
+        pas = 1;
+
+      }
+
+      else if (magnitud < 100) {
+
+        pas = 10;
+
+      }
+
+      else if (magnitud < 1000) {
+
+        pas = 100;
+
+      }
+
+      else if (magnitud < 10000) {
+
+        pas = 1000;
+
+      }
+
+      else {
+
+        pas =
+          Math.pow(
+            10,
+            Math.floor(
+              Math.log10(magnitud)
+            ) - 1
+          );
+
+      }
+
+
+      /*
+        Posem 4 intervals abans
+        i 4 després.
+      */
+
+      let centre =
+        Math.floor(resultat / pas) *
+        pas;
+
+      let minim =
+        centre - (4 * pas);
+
+      let maxim =
+        centre + (5 * pas);
+
+
+      // DIMENSIONS SVG
+
+      let xInicial = 70;
+      let xFinal = 930;
+
+      let yRecta = 85;
+
+      let amplada =
+        xFinal - xInicial;
+
+
+      // CREAR LÍNIA PRINCIPAL
+
+      let linia =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+
+      linia.setAttribute(
+        "x1",
+        xInicial
+      );
+
+      linia.setAttribute(
+        "y1",
+        yRecta
+      );
+
+      linia.setAttribute(
+        "x2",
+        xFinal
+      );
+
+      linia.setAttribute(
+        "y2",
+        yRecta
+      );
+
+      linia.setAttribute(
+        "class",
+        "liniaRecta"
+      );
+
+      svg.appendChild(linia);
+
+
+      // FLETXA FINAL
+
+      let fletxa =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "polygon"
+        );
+
+      fletxa.setAttribute(
+        "points",
+        "930,85 915,77 915,93"
+      );
+
+      fletxa.setAttribute(
+        "fill",
+        "#222"
+      );
+
+      svg.appendChild(fletxa);
+
+
+      // MARQUES DE L'ESCALA
+
+      for (let i = 0; i <= 9; i++) {
+
+        let valor =
+          minim + (i * pas);
+
+        let x =
+          xInicial +
+          (i / 9) * amplada;
+
+
+        // MARCA
+
+        let marca =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+          );
+
+        marca.setAttribute(
+          "x1",
+          x
+        );
+
+        marca.setAttribute(
+          "y1",
+          yRecta - 9
+        );
+
+        marca.setAttribute(
+          "x2",
+          x
+        );
+
+        marca.setAttribute(
+          "y2",
+          yRecta + 9
+        );
+
+        marca.setAttribute(
+          "class",
+          "marca"
+        );
+
+        svg.appendChild(marca);
+
+
+        // NÚMERO DE LA MARCA
+
+        let text =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+
+        text.setAttribute(
+          "x",
+          x
+        );
+
+        text.setAttribute(
+          "y",
+          yRecta + 35
+        );
+
+        text.setAttribute(
+          "class",
+          "numeroMarca"
+        );
+
+
+        let decimalsEscala =
+          pas < 1 ? 1 : 0;
+
+
+        text.textContent =
+          valor
+            .toFixed(decimalsEscala)
+            .replace(".", ",");
+
+
+        svg.appendChild(text);
+
+      }
+
+
+      // POSICIÓ EXACTA DEL RESULTAT
+
+      let xResultat =
+
+        xInicial +
+
+        (
+          (resultat - minim) /
+          (maxim - minim)
+        ) *
+
+        amplada;
+
+
+      // LÍNIA VERTICAL DEL RESULTAT
+
+      let indicador =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+
+      indicador.setAttribute(
+        "x1",
+        xResultat
+      );
+
+      indicador.setAttribute(
+        "y1",
+        42
+      );
+
+      indicador.setAttribute(
+        "x2",
+        xResultat
+      );
+
+      indicador.setAttribute(
+        "y2",
+        yRecta
+      );
+
+      indicador.setAttribute(
+        "stroke",
+        "#d62828"
+      );
+
+      indicador.setAttribute(
+        "stroke-width",
+        "2"
+      );
+
+      svg.appendChild(indicador);
+
+
+      // PUNT DEL RESULTAT
+
+      let punt =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "circle"
+        );
+
+      punt.setAttribute(
+        "cx",
+        xResultat
+      );
+
+      punt.setAttribute(
+        "cy",
+        yRecta
+      );
+
+      punt.setAttribute(
+        "r",
+        8
+      );
+
+      punt.setAttribute(
+        "class",
+        "puntResultat"
+      );
+
+      svg.appendChild(punt);
+
+
+      // ETIQUETA DEL RESULTAT
+
+      let etiqueta =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text"
+        );
+
+      etiqueta.setAttribute(
+        "x",
+        xResultat
+      );
+
+      etiqueta.setAttribute(
+        "y",
+        30
+      );
+
+      etiqueta.setAttribute(
+        "class",
+        "textResultat"
+      );
+
+      etiqueta.textContent =
+        resultat
+          .toFixed(3)
+          .replace(".", ",");
+
+
+      svg.appendChild(etiqueta);
+
+
+      // FINALMENT MOSTREM LA RECTA
+
+      contenidor.style.display =
+        "block";
 
     }
 
