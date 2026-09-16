@@ -61,13 +61,13 @@
       margin: 10px;
     }
 
-    /* RESULTAT */
+    /* RESULTAT MÉS GRAN */
 
     #resultat {
-      font-size: 46px;
+      font-size: 62px;
       font-weight: bold;
       margin: 10px;
-      min-height: 52px;
+      min-height: 72px;
     }
 
     /* BOTONS */
@@ -85,7 +85,10 @@
       display: none;
       width: 90%;
       max-width: 950px;
-      margin: 15px auto 20px auto;
+
+      /* MÉS ESPAI PER SOBRE */
+      margin: 35px auto 20px auto;
+
       background-color: white;
       border-radius: 8px;
       padding: 8px 12px;
@@ -97,8 +100,6 @@
       height: 125px;
       overflow: visible;
     }
-
-    /* LÍNIA PRINCIPAL */
 
     .liniaRecta {
       stroke: #222;
@@ -126,14 +127,14 @@
       text-anchor: middle;
     }
 
-    /* RESULTAT */
+    /* RESULTAT A LA RECTA */
 
     .puntResultat {
       fill: #d62828;
     }
 
     .textResultat {
-      font-size: 21px;
+      font-size: 24px;
       font-weight: bold;
       text-anchor: middle;
       fill: #d62828;
@@ -433,7 +434,7 @@
       }
 
 
-      // RESULTAT
+      // CALCULAR RESULTAT
 
       if (operacio === "+") {
 
@@ -531,6 +532,8 @@
       }
 
 
+      // COMPTE ENRERE
+
       temporitzador =
         setInterval(function() {
 
@@ -603,13 +606,7 @@
       svg.innerHTML = "";
 
 
-      /*
-        Mostrem una recta que cobreix
-        6 unitats completes.
-
-        El resultat queda aproximadament
-        al centre.
-      */
+      // 6 UNITATS AL VOLTANT DEL RESULTAT
 
       let centre =
         Math.floor(resultat);
@@ -620,12 +617,6 @@
       let maxim =
         centre + 3;
 
-
-      /*
-        Si el resultat és exactament molt
-        proper al límit, mantenim espai
-        suficient als dos costats.
-      */
 
       if (resultat - minim < 1) {
         minim--;
@@ -690,16 +681,7 @@
       svg.appendChild(fletxa);
 
 
-      /*
-        SUBDIVISIONS
-
-        Cada unitat es divideix
-        en 10 parts.
-
-        Per tant:
-        1 marca gran = 1 unitat
-        1 marca petita = 0,1
-      */
+      // UNITATS I DÈCIMES
 
       let totalDecimes =
         Math.round(
@@ -727,13 +709,9 @@
           amplada;
 
 
-        // COMPROVEM SI ÉS UNA UNITAT
-
         let esUnitat =
           i % 10 === 0;
 
-
-        // CREAR MARCA
 
         let marca =
           document.createElementNS(
@@ -755,8 +733,6 @@
 
         if (esUnitat) {
 
-          // MARCA GRAN
-
           marca.setAttribute(
             "y1",
             yRecta - 12
@@ -775,8 +751,6 @@
         }
 
         else {
-
-          // MARCA PETITA
 
           marca.setAttribute(
             "y1",
@@ -799,7 +773,7 @@
         svg.appendChild(marca);
 
 
-        // NOMÉS ESCRIVIM LES UNITATS
+        // ESCRIURE NOMÉS LES UNITATS
 
         if (esUnitat) {
 
@@ -834,7 +808,7 @@
       }
 
 
-      // POSICIÓ MATEMÀTICA EXACTA DEL RESULTAT
+      // POSICIÓ EXACTA DEL RESULTAT
 
       let xResultat =
 
@@ -848,7 +822,7 @@
         amplada;
 
 
-      // LÍNIA VERTICAL DEL RESULTAT
+      // INDICADOR
 
       let indicador =
         document.createElementNS(
@@ -863,7 +837,7 @@
 
       indicador.setAttribute(
         "y1",
-        35
+        32
       );
 
       indicador.setAttribute(
@@ -889,7 +863,7 @@
       svg.appendChild(indicador);
 
 
-      // PUNT DEL RESULTAT
+      // PUNT
 
       let punt =
         document.createElementNS(
@@ -920,7 +894,7 @@
       svg.appendChild(punt);
 
 
-      // VALOR DEL RESULTAT
+      // ETIQUETA DEL RESULTAT
 
       let etiqueta =
         document.createElementNS(
@@ -935,7 +909,7 @@
 
       etiqueta.setAttribute(
         "y",
-        25
+        22
       );
 
       etiqueta.setAttribute(
