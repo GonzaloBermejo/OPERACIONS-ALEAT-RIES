@@ -17,8 +17,6 @@
       margin: 8px 0 10px 0;
     }
 
-    /* CONFIGURACIÓ */
-
     .configuracio {
       margin: 8px;
       font-size: 16px;
@@ -45,23 +43,17 @@
       text-align: center;
     }
 
-    /* OPERACIÓ */
-
     #operacio {
       font-size: 82px;
       font-weight: bold;
       margin: 22px 15px 10px 15px;
     }
 
-    /* COMPTE ENRERE */
-
     #temps {
       font-size: 46px;
       font-weight: bold;
       margin: 8px;
     }
-
-    /* RESULTAT */
 
     #resultat {
       font-size: 62px;
@@ -70,16 +62,12 @@
       min-height: 70px;
     }
 
-    /* BOTONS */
-
     button {
       font-size: 17px;
       padding: 9px 18px;
       margin: 5px;
       cursor: pointer;
     }
-
-    /* RECTA NUMÈRICA */
 
     #contenidorRecta {
       display: none;
@@ -276,13 +264,16 @@
     let tempsRestant = 60;
     let hiHaOperacio = false;
 
+    let operacioActual = "";
+    let decimals1Actuals = 0;
+    let decimals2Actuals = 0;
+
 
     // GENERAR NÚMERO
 
     function generarNumero(minim, maxim, decimals) {
 
-      let factor =
-        Math.pow(10, decimals);
+      let factor = Math.pow(10, decimals);
 
       let minimEnter =
         Math.ceil(minim * factor);
@@ -300,6 +291,101 @@
     }
 
 
+    // DECIMALS QUE HA DE TENIR EL RESULTAT
+
+    function obtenirDecimalsResultat() {
+
+      // SUMA I RESTA:
+      // màxim nombre de decimals dels operands
+
+      if (
+        operacioActual === "+" ||
+        operacioActual === "−"
+      ) {
+
+        return Math.max(
+          decimals1Actuals,
+          decimals2Actuals
+        );
+
+      }
+
+
+      // MULTIPLICACIÓ:
+      // suma dels decimals
+
+      if (operacioActual === "×") {
+
+        return (
+          decimals1Actuals +
+          decimals2Actuals
+        );
+
+      }
+
+
+      // DIVISIÓ:
+      // màxim nombre de decimals dels operands
+
+      if (operacioActual === "÷") {
+
+        return Math.max(
+          decimals1Actuals,
+          decimals2Actuals
+        );
+
+      }
+
+
+      return 0;
+    }
+
+
+    // FORMATEJAR RESULTAT
+
+    function formatarResultat(numero) {
+
+      let decimals =
+        obtenirDecimalsResultat();
+
+
+      /*
+        Arrodonim a la precisió
+        corresponent a l'operació.
+      */
+
+      let text =
+        numero.toFixed(decimals);
+
+
+      /*
+        Eliminem zeros finals
+        que no aporten informació.
+
+        3,750000 -> 3,75
+        8,000000 -> 8
+      */
+
+      if (text.includes(".")) {
+
+        text = text.replace(
+          /0+$/,
+          ""
+        );
+
+        text = text.replace(
+          /\.$/,
+          ""
+        );
+
+      }
+
+
+      return text.replace(".", ",");
+
+    }
+
+
     // ACTUALITZAR RELLOTGE
 
     function actualitzarTemps() {
@@ -310,7 +396,9 @@
       let segons =
         tempsRestant % 60;
 
-      document.getElementById("temps").textContent =
+      document.getElementById(
+        "temps"
+      ).textContent =
 
         String(minuts).padStart(2, "0") +
         ":" +
@@ -330,22 +418,30 @@
 
       let min1 =
         Number(
-          document.getElementById("min1").value
+          document.getElementById(
+            "min1"
+          ).value
         );
 
       let max1 =
         Number(
-          document.getElementById("max1").value
+          document.getElementById(
+            "max1"
+          ).value
         );
 
       let min2 =
         Number(
-          document.getElementById("min2").value
+          document.getElementById(
+            "min2"
+          ).value
         );
 
       let max2 =
         Number(
-          document.getElementById("max2").value
+          document.getElementById(
+            "max2"
+          ).value
         );
 
 
@@ -353,18 +449,25 @@
 
       let decimals1 =
         Number(
-          document.getElementById("decimals1").value
+          document.getElementById(
+            "decimals1"
+          ).value
         );
 
       let decimals2 =
         Number(
-          document.getElementById("decimals2").value
+          document.getElementById(
+            "decimals2"
+          ).value
         );
 
 
       // COMPROVACIÓ
 
-      if (min1 > max1 || min2 > max2) {
+      if (
+        min1 > max1 ||
+        min2 > max2
+      ) {
 
         alert(
           "El mínim no pot ser superior al màxim."
@@ -391,7 +494,7 @@
         );
 
 
-      // OPERACIÓ
+      // OPERACIÓ ALEATÒRIA
 
       let operacions =
         ["+", "−", "×", "÷"];
@@ -409,7 +512,19 @@
 
       if (operacio === "÷") {
 
-        while (numero2 === 0) {
+        /*
+          Si el rang només permet zero,
+          no podem generar una divisió.
+          En aquest cas triem una altra
+          operació.
+        */
+
+        let intents = 0;
+
+        while (
+          numero2 === 0 &&
+          intents < 100
+        ) {
 
           numero2 =
             generarNumero(
@@ -418,9 +533,39 @@
               decimals2
             );
 
+          intents++;
+
+        }
+
+
+        if (numero2 === 0) {
+
+          let altres =
+            ["+", "−", "×"];
+
+          operacio =
+            altres[
+              Math.floor(
+                Math.random() *
+                altres.length
+              )
+            ];
+
         }
 
       }
+
+
+      // GUARDAR INFORMACIÓ DE L'OPERACIÓ
+
+      operacioActual =
+        operacio;
+
+      decimals1Actuals =
+        decimals1;
+
+      decimals2Actuals =
+        decimals2;
 
 
       // CALCULAR RESULTAT
@@ -516,6 +661,7 @@
       if (tempsRestant <= 0) {
 
         mostrarResultat();
+
         return;
 
       }
@@ -554,20 +700,20 @@
         return;
       }
 
-      clearInterval(temporitzador);
 
-
-      let resultatMostrat =
-        resultatActual
-          .toFixed(3)
-          .replace(".", ",");
+      clearInterval(
+        temporitzador
+      );
 
 
       document.getElementById(
         "resultat"
       ).textContent =
 
-        "= " + resultatMostrat;
+        "= " +
+        formatarResultat(
+          resultatActual
+        );
 
 
       dibuixarRecta(
@@ -608,13 +754,18 @@
 
 
       if (resultat - minim < 1) {
+
         minim--;
         maxim--;
+
       }
 
+
       if (maxim - resultat < 1) {
+
         minim++;
         maxim++;
+
       }
 
 
@@ -637,16 +788,34 @@
           "line"
         );
 
-      linia.setAttribute("x1", xInicial);
-      linia.setAttribute("y1", yRecta);
-      linia.setAttribute("x2", xFinal);
-      linia.setAttribute("y2", yRecta);
+      linia.setAttribute(
+        "x1",
+        xInicial
+      );
+
+      linia.setAttribute(
+        "y1",
+        yRecta
+      );
+
+      linia.setAttribute(
+        "x2",
+        xFinal
+      );
+
+      linia.setAttribute(
+        "y2",
+        yRecta
+      );
+
       linia.setAttribute(
         "class",
         "liniaRecta"
       );
 
-      svg.appendChild(linia);
+      svg.appendChild(
+        linia
+      );
 
 
       // FLETXA
@@ -667,7 +836,9 @@
         "#222"
       );
 
-      svg.appendChild(fletxa);
+      svg.appendChild(
+        fletxa
+      );
 
 
       // UNITATS I DÈCIMES
@@ -759,7 +930,9 @@
         }
 
 
-        svg.appendChild(marca);
+        svg.appendChild(
+          marca
+        );
 
 
         // ESCRIURE NOMÉS LES UNITATS
@@ -790,7 +963,9 @@
           text.textContent =
             Math.round(valor);
 
-          svg.appendChild(text);
+          svg.appendChild(
+            text
+          );
 
         }
 
@@ -849,7 +1024,9 @@
         "2"
       );
 
-      svg.appendChild(indicador);
+      svg.appendChild(
+        indicador
+      );
 
 
       // PUNT
@@ -880,7 +1057,9 @@
         "puntResultat"
       );
 
-      svg.appendChild(punt);
+      svg.appendChild(
+        punt
+      );
 
 
       // ETIQUETA DEL RESULTAT
@@ -907,15 +1086,15 @@
       );
 
       etiqueta.textContent =
-        resultat
-          .toFixed(3)
-          .replace(".", ",");
+        formatarResultat(
+          resultat
+        );
 
 
-      svg.appendChild(etiqueta);
+      svg.appendChild(
+        etiqueta
+      );
 
-
-      // MOSTRAR RECTA
 
       contenidor.style.display =
         "block";
