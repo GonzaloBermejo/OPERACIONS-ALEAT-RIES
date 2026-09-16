@@ -8,74 +8,74 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 30px;
+      margin-top: 18px;
       background-color: #f4f4f4;
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 15px;
+      font-size: 27px;
+      margin: 8px 0 10px 0;
     }
 
     /* CONFIGURACIÓ */
 
     .configuracio {
-      margin: 10px;
-      font-size: 15px;
+      margin: 6px;
+      font-size: 13px;
     }
 
     .bloc {
       display: inline-block;
-      padding: 8px 12px;
-      margin: 5px;
+      padding: 6px 9px;
+      margin: 3px;
       background-color: white;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 7px;
+      font-size: 12px;
     }
 
     .bloc strong {
-      font-size: 15px;
+      font-size: 13px;
     }
 
     input {
-      font-size: 14px;
-      width: 65px;
-      padding: 4px;
-      margin: 3px;
+      font-size: 12px;
+      width: 57px;
+      padding: 3px;
+      margin: 2px;
       text-align: center;
     }
 
     /* OPERACIÓ */
 
     #operacio {
-      font-size: 95px;
+      font-size: 82px;
       font-weight: bold;
-      margin: 35px 20px 20px 20px;
+      margin: 24px 15px 12px 15px;
     }
 
     /* COMPTE ENRERE */
 
     #temps {
-      font-size: 55px;
+      font-size: 46px;
       font-weight: bold;
-      margin: 15px;
+      margin: 10px;
     }
 
     /* RESULTAT */
 
     #resultat {
-      font-size: 55px;
+      font-size: 46px;
       font-weight: bold;
-      margin: 20px;
-      min-height: 65px;
+      margin: 10px;
+      min-height: 52px;
     }
 
     /* BOTONS */
 
     button {
-      font-size: 20px;
-      padding: 11px 22px;
-      margin: 8px;
+      font-size: 17px;
+      padding: 9px 18px;
+      margin: 5px;
       cursor: pointer;
     }
 
@@ -84,41 +84,56 @@
     #contenidorRecta {
       display: none;
       width: 90%;
-      max-width: 1000px;
-      margin: 25px auto 40px auto;
+      max-width: 950px;
+      margin: 15px auto 20px auto;
       background-color: white;
-      border-radius: 10px;
-      padding: 15px;
+      border-radius: 8px;
+      padding: 8px 12px;
       box-sizing: border-box;
     }
 
     #rectaNumerica {
       width: 100%;
-      height: 150px;
+      height: 125px;
       overflow: visible;
     }
+
+    /* LÍNIA PRINCIPAL */
 
     .liniaRecta {
       stroke: #222;
       stroke-width: 3;
     }
 
-    .marca {
+    /* UNITATS */
+
+    .marcaUnitat {
       stroke: #222;
-      stroke-width: 2;
+      stroke-width: 2.5;
     }
 
+    /* DÈCIMES */
+
+    .marcaDecima {
+      stroke: #777;
+      stroke-width: 1.3;
+    }
+
+    /* NÚMEROS DE LES UNITATS */
+
     .numeroMarca {
-      font-size: 18px;
+      font-size: 17px;
       text-anchor: middle;
     }
+
+    /* RESULTAT */
 
     .puntResultat {
       fill: #d62828;
     }
 
     .textResultat {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: bold;
       text-anchor: middle;
       fill: #d62828;
@@ -257,7 +272,7 @@
 
     <svg
       id="rectaNumerica"
-      viewBox="0 0 1000 150"
+      viewBox="0 0 1000 140"
       preserveAspectRatio="xMidYMid meet"
     ></svg>
 
@@ -276,7 +291,8 @@
 
     function generarNumero(minim, maxim, decimals) {
 
-      let factor = Math.pow(10, decimals);
+      let factor =
+        Math.pow(10, decimals);
 
       let minimEnter =
         Math.ceil(minim * factor);
@@ -320,31 +336,43 @@
       clearInterval(temporitzador);
 
 
-      // LLEGIR RANGS
+      // RANGS
 
       let min1 =
-        Number(document.getElementById("min1").value);
+        Number(
+          document.getElementById("min1").value
+        );
 
       let max1 =
-        Number(document.getElementById("max1").value);
+        Number(
+          document.getElementById("max1").value
+        );
 
       let min2 =
-        Number(document.getElementById("min2").value);
+        Number(
+          document.getElementById("min2").value
+        );
 
       let max2 =
-        Number(document.getElementById("max2").value);
+        Number(
+          document.getElementById("max2").value
+        );
 
 
-      // LLEGIR DECIMALS
+      // DECIMALS
 
       let decimals1 =
-        Number(document.getElementById("decimals1").value);
+        Number(
+          document.getElementById("decimals1").value
+        );
 
       let decimals2 =
-        Number(document.getElementById("decimals2").value);
+        Number(
+          document.getElementById("decimals2").value
+        );
 
 
-      // COMPROVACIONS
+      // COMPROVACIÓ
 
       if (min1 > max1 || min2 > max2) {
 
@@ -373,7 +401,7 @@
         );
 
 
-      // OPERACIÓ ALEATÒRIA
+      // OPERACIÓ
 
       let operacions =
         ["+", "−", "×", "÷"];
@@ -387,7 +415,7 @@
         ];
 
 
-      // EVITEM DIVIDIR ENTRE ZERO
+      // EVITAR DIVISIÓ ENTRE ZERO
 
       if (operacio === "÷") {
 
@@ -405,7 +433,7 @@
       }
 
 
-      // CALCULAR RESULTAT
+      // RESULTAT
 
       if (operacio === "+") {
 
@@ -457,7 +485,7 @@
           .replace(".", ",");
 
 
-      // AMAGAR RESULTAT ANTERIOR
+      // AMAGAR RESULTAT I RECTA
 
       document.getElementById(
         "resultat"
@@ -495,8 +523,6 @@
       actualitzarTemps();
 
 
-      // SI EL TEMPS ÉS ZERO
-
       if (tempsRestant <= 0) {
 
         mostrarResultat();
@@ -504,8 +530,6 @@
 
       }
 
-
-      // COMPTE ENRERE
 
       temporitzador =
         setInterval(function() {
@@ -541,8 +565,6 @@
       clearInterval(temporitzador);
 
 
-      // RESULTAT AMB 3 DECIMALS
-
       let resultatMostrat =
         resultatActual
           .toFixed(3)
@@ -555,8 +577,6 @@
 
         "= " + resultatMostrat;
 
-
-      // MOSTRAR RECTA
 
       dibuixarRecta(
         resultatActual
@@ -580,94 +600,56 @@
         );
 
 
-      // BUIDEM LA RECTA ANTERIOR
-
       svg.innerHTML = "";
 
 
       /*
-        Escollim automàticament
-        una escala al voltant
-        del resultat.
-      */
+        Mostrem una recta que cobreix
+        6 unitats completes.
 
-      let magnitud =
-        Math.abs(resultat);
-
-
-      let pas;
-
-      if (magnitud < 1) {
-
-        pas = 0.1;
-
-      }
-
-      else if (magnitud < 10) {
-
-        pas = 1;
-
-      }
-
-      else if (magnitud < 100) {
-
-        pas = 10;
-
-      }
-
-      else if (magnitud < 1000) {
-
-        pas = 100;
-
-      }
-
-      else if (magnitud < 10000) {
-
-        pas = 1000;
-
-      }
-
-      else {
-
-        pas =
-          Math.pow(
-            10,
-            Math.floor(
-              Math.log10(magnitud)
-            ) - 1
-          );
-
-      }
-
-
-      /*
-        Posem 4 intervals abans
-        i 4 després.
+        El resultat queda aproximadament
+        al centre.
       */
 
       let centre =
-        Math.floor(resultat / pas) *
-        pas;
+        Math.floor(resultat);
 
       let minim =
-        centre - (4 * pas);
+        centre - 3;
 
       let maxim =
-        centre + (5 * pas);
+        centre + 3;
 
 
-      // DIMENSIONS SVG
+      /*
+        Si el resultat és exactament molt
+        proper al límit, mantenim espai
+        suficient als dos costats.
+      */
 
-      let xInicial = 70;
-      let xFinal = 930;
+      if (resultat - minim < 1) {
+        minim--;
+        maxim--;
+      }
 
-      let yRecta = 85;
+      if (maxim - resultat < 1) {
+        minim++;
+        maxim++;
+      }
+
+
+      // DIMENSIONS
+
+      let xInicial = 60;
+      let xFinal = 940;
+
+      let yRecta = 75;
 
       let amplada =
         xFinal - xInicial;
 
 
-      // CREAR LÍNIA PRINCIPAL
+      // LÍNIA PRINCIPAL
 
       let linia =
         document.createElementNS(
@@ -675,26 +657,10 @@
           "line"
         );
 
-      linia.setAttribute(
-        "x1",
-        xInicial
-      );
-
-      linia.setAttribute(
-        "y1",
-        yRecta
-      );
-
-      linia.setAttribute(
-        "x2",
-        xFinal
-      );
-
-      linia.setAttribute(
-        "y2",
-        yRecta
-      );
-
+      linia.setAttribute("x1", xInicial);
+      linia.setAttribute("y1", yRecta);
+      linia.setAttribute("x2", xFinal);
+      linia.setAttribute("y2", yRecta);
       linia.setAttribute(
         "class",
         "liniaRecta"
@@ -703,7 +669,7 @@
       svg.appendChild(linia);
 
 
-      // FLETXA FINAL
+      // FLETXA
 
       let fletxa =
         document.createElementNS(
@@ -713,7 +679,7 @@
 
       fletxa.setAttribute(
         "points",
-        "930,85 915,77 915,93"
+        "940,75 925,67 925,83"
       );
 
       fletxa.setAttribute(
@@ -724,19 +690,50 @@
       svg.appendChild(fletxa);
 
 
-      // MARQUES DE L'ESCALA
+      /*
+        SUBDIVISIONS
 
-      for (let i = 0; i <= 9; i++) {
+        Cada unitat es divideix
+        en 10 parts.
+
+        Per tant:
+        1 marca gran = 1 unitat
+        1 marca petita = 0,1
+      */
+
+      let totalDecimes =
+        Math.round(
+          (maxim - minim) * 10
+        );
+
+
+      for (
+        let i = 0;
+        i <= totalDecimes;
+        i++
+      ) {
 
         let valor =
-          minim + (i * pas);
+          minim + (i / 10);
 
         let x =
           xInicial +
-          (i / 9) * amplada;
+
+          (
+            (valor - minim) /
+            (maxim - minim)
+          ) *
+
+          amplada;
 
 
-        // MARCA
+        // COMPROVEM SI ÉS UNA UNITAT
+
+        let esUnitat =
+          i % 10 === 0;
+
+
+        // CREAR MARCA
 
         let marca =
           document.createElementNS(
@@ -744,14 +741,10 @@
             "line"
           );
 
+
         marca.setAttribute(
           "x1",
           x
-        );
-
-        marca.setAttribute(
-          "y1",
-          yRecta - 9
         );
 
         marca.setAttribute(
@@ -759,59 +752,89 @@
           x
         );
 
-        marca.setAttribute(
-          "y2",
-          yRecta + 9
-        );
 
-        marca.setAttribute(
-          "class",
-          "marca"
-        );
+        if (esUnitat) {
+
+          // MARCA GRAN
+
+          marca.setAttribute(
+            "y1",
+            yRecta - 12
+          );
+
+          marca.setAttribute(
+            "y2",
+            yRecta + 12
+          );
+
+          marca.setAttribute(
+            "class",
+            "marcaUnitat"
+          );
+
+        }
+
+        else {
+
+          // MARCA PETITA
+
+          marca.setAttribute(
+            "y1",
+            yRecta - 5
+          );
+
+          marca.setAttribute(
+            "y2",
+            yRecta + 5
+          );
+
+          marca.setAttribute(
+            "class",
+            "marcaDecima"
+          );
+
+        }
+
 
         svg.appendChild(marca);
 
 
-        // NÚMERO DE LA MARCA
+        // NOMÉS ESCRIVIM LES UNITATS
 
-        let text =
-          document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text"
+        if (esUnitat) {
+
+          let text =
+            document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "text"
+            );
+
+          text.setAttribute(
+            "x",
+            x
           );
 
-        text.setAttribute(
-          "x",
-          x
-        );
+          text.setAttribute(
+            "y",
+            yRecta + 36
+          );
 
-        text.setAttribute(
-          "y",
-          yRecta + 35
-        );
+          text.setAttribute(
+            "class",
+            "numeroMarca"
+          );
 
-        text.setAttribute(
-          "class",
-          "numeroMarca"
-        );
+          text.textContent =
+            Math.round(valor);
 
+          svg.appendChild(text);
 
-        let decimalsEscala =
-          pas < 1 ? 1 : 0;
-
-
-        text.textContent =
-          valor
-            .toFixed(decimalsEscala)
-            .replace(".", ",");
-
-
-        svg.appendChild(text);
+        }
 
       }
 
 
-      // POSICIÓ EXACTA DEL RESULTAT
+      // POSICIÓ MATEMÀTICA EXACTA DEL RESULTAT
 
       let xResultat =
 
@@ -840,7 +863,7 @@
 
       indicador.setAttribute(
         "y1",
-        42
+        35
       );
 
       indicador.setAttribute(
@@ -886,7 +909,7 @@
 
       punt.setAttribute(
         "r",
-        8
+        7
       );
 
       punt.setAttribute(
@@ -897,7 +920,7 @@
       svg.appendChild(punt);
 
 
-      // ETIQUETA DEL RESULTAT
+      // VALOR DEL RESULTAT
 
       let etiqueta =
         document.createElementNS(
@@ -912,7 +935,7 @@
 
       etiqueta.setAttribute(
         "y",
-        30
+        25
       );
 
       etiqueta.setAttribute(
@@ -929,7 +952,7 @@
       svg.appendChild(etiqueta);
 
 
-      // FINALMENT MOSTREM LA RECTA
+      // MOSTRAR RECTA
 
       contenidor.style.display =
         "block";
