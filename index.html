@@ -23,7 +23,7 @@
     }
 
     #temps {
-      font-size: 40px;
+      font-size: 50px;
       font-weight: bold;
       margin: 25px;
     }
@@ -41,7 +41,7 @@
 
     input {
       font-size: 20px;
-      width: 80px;
+      width: 70px;
       padding: 5px;
       text-align: center;
     }
@@ -61,13 +61,28 @@
 
   <div class="configuracio">
     Temps:
-    <input type="number" id="tempsConfigurat" value="20" min="1">
-    segons
+
+    <input
+      type="number"
+      id="minuts"
+      value="1"
+      min="0"
+    >
+    min
+
+    <input
+      type="number"
+      id="segons"
+      value="0"
+      min="0"
+      max="59"
+    >
+    s
   </div>
 
   <div id="operacio">---</div>
 
-  <div id="temps">20</div>
+  <div id="temps">01:00</div>
 
   <div id="resultat"></div>
 
@@ -84,7 +99,7 @@
 
     let resultatActual = 0;
     let temporitzador;
-    let tempsRestant = 20;
+    let tempsRestant = 60;
 
 
     function generarNumero() {
@@ -92,9 +107,20 @@
     }
 
 
+    function actualitzarTemps() {
+
+      let minuts = Math.floor(tempsRestant / 60);
+      let segons = tempsRestant % 60;
+
+      document.getElementById("temps").textContent =
+        String(minuts).padStart(2, "0") +
+        ":" +
+        String(segons).padStart(2, "0");
+    }
+
+
     function generarOperacio() {
 
-      // Aturem qualsevol temporitzador anterior
       clearInterval(temporitzador);
 
       let numero1 = generarNumero();
@@ -107,6 +133,7 @@
 
 
       // Calculem el resultat
+
       if (operacio === "+") {
         resultatActual = numero1 + numero2;
       }
@@ -124,7 +151,8 @@
       }
 
 
-      // Mostrem l'operació amb coma decimal
+      // Mostrem l'operació
+
       document.getElementById("operacio").textContent =
         numero1.toFixed(3).replace(".", ",") +
         " " +
@@ -134,27 +162,39 @@
 
 
       // Esborrem el resultat anterior
+
       document.getElementById("resultat").textContent = "";
 
 
-      // Agafem el temps configurat
-      tempsRestant =
-        Number(document.getElementById("tempsConfigurat").value);
+      // Llegim minuts i segons
 
-      document.getElementById("temps").textContent =
-        tempsRestant;
+      let minuts =
+        Number(document.getElementById("minuts").value);
+
+      let segons =
+        Number(document.getElementById("segons").value);
+
+
+      // Convertim tot a segons
+
+      tempsRestant =
+        (minuts * 60) + segons;
+
+
+      // Mostrem el temps inicial
+
+      actualitzarTemps();
 
 
       // Comença la compte enrere
+
       temporitzador = setInterval(function() {
 
         tempsRestant--;
 
-        document.getElementById("temps").textContent =
-          tempsRestant;
+        actualitzarTemps();
 
 
-        // Quan arriba a zero
         if (tempsRestant <= 0) {
 
           clearInterval(temporitzador);
@@ -170,10 +210,13 @@
 
     function mostrarResultat() {
 
-      // Aturem el temps
+      // Aturem la compte enrere
+
       clearInterval(temporitzador);
 
+
       // Mostrem el resultat
+
       document.getElementById("resultat").textContent =
         "= " +
         resultatActual
